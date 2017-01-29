@@ -3,6 +3,7 @@ import classnames from 'classnames';
 import validateInput from '../../../server/shared/validations/signup';
 import TextFieldGroup from '../common/TextFieldGroup';
 
+
 class SignupForm extends React.Component {
 	
 	constructor(props) {
@@ -41,13 +42,16 @@ class SignupForm extends React.Component {
 
 		if(this.isValid())
 		{
-		this.setState({errors:{}, isLoading:true} );
+			this.setState({errors:{}, isLoading:true} );
 
-		this.props.userSignupRequest(this.state).then(
-			() => {},
-			(err) => this.setState({errors:err.response.data, isLoading: false})
+			this.props.userSignupRequest(this.state).then(
+				() => {
+					console.log("back from service call");
+					this.context.router.push('/');
+				},
+				(err) => this.setState({errors:err.response.data, isLoading: false})
 		);
-	}
+		}
 		//axios.post('/api/users',{user: this.state});
 	}
 
@@ -56,50 +60,50 @@ class SignupForm extends React.Component {
 		const {errors } = this.state;
 		return (
 			<form onSubmit={this.onSubmit}>
-				<h1> Join MyCircle Community!</h1>
+				<h1>Join MyCircle Community!</h1>
 
 
-<TextFieldGroup
-          error={errors.username}
-          label="Username"
-          onChange={this.onChange}
-          checkUserExists={this.checkUserExists}
-          value={this.state.username}
-          field="username"
-        />
+				<TextFieldGroup
+	          		error={errors.username}
+	          		label="Username"
+	          		onChange={this.onChange}
+	          		checkUserExists={this.checkUserExists}
+	          		value={this.state.username}
+	          		field="username"
+	        	/>
 
-        <TextFieldGroup
-          error={errors.email}
-          label="Email"
-          onChange={this.onChange}
-          checkUserExists={this.checkUserExists}
-          value={this.state.email}
-          field="email"
-        />
+		        <TextFieldGroup
+		          error={errors.email}
+		          label="Email"
+		          onChange={this.onChange}
+		          checkUserExists={this.checkUserExists}
+		          value={this.state.email}
+		          field="email"
+		        />
 
-        <TextFieldGroup
-          error={errors.password}
-          label="Password"
-          onChange={this.onChange}
-          value={this.state.password}
-          field="password"
-          type="password"
-        />
+		        <TextFieldGroup
+		          error={errors.password}
+		          label="Password"
+		          onChange={this.onChange}
+		          value={this.state.password}
+		          field="password"
+		          type="password"
+		        />
 
-        <TextFieldGroup
-          error={errors.passwordConfirmation}
-          label="Password Confirmation"
-          onChange={this.onChange}
-          value={this.state.passwordConfirmation}
-          field="passwordConfirmation"
-          type="password"		
-         />
-		    
+		        <TextFieldGroup
+		          error={errors.passwordConfirmation}
+		          label="Password Confirmation"
+		          onChange={this.onChange}
+		          value={this.state.passwordConfirmation}
+		          field="passwordConfirmation"
+		          type="password"		
+		         />
+			    
 
 				<div className="form-group">
-					<button disabled = {this.state.isLoading} className="btn btn-primary btn-lg">
-						Sign up
-					</button>
+						<button disabled = {this.state.isLoading} className="btn btn-primary btn-lg">
+							Sign up
+						</button>
 				</div>
 			</form>
 		);
@@ -108,6 +112,10 @@ class SignupForm extends React.Component {
 
 SignupForm.propTypes = {
 	userSignupRequest: React.PropTypes.func.isRequired
+}
+
+SignupForm.contextTypes = {
+  router: React.PropTypes.object.isRequired
 }
 
 export default SignupForm;
